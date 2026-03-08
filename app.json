@@ -1,4 +1,10 @@
 {
   "name": "AeroChat",
-  "displayName": "AeroChat"
+  "displayName": "AeroChat",
+  "ios": {
+    "bundleIdentifier": "com.expeditiontech.aerochat"
+  },
+  "android": {
+    "package": "com.expeditiontech.aerochat"
+  }
 }

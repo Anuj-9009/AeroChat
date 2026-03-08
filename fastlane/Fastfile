@@ -1,0 +1,46 @@
+default_platform(:ios)
+
+# ─────────────────────────────────────────────────────────
+# AeroChat — Fastlane CI/CD
+# Automated beta deployment to TestFlight & Google Play
+# ─────────────────────────────────────────────────────────
+
+platform :ios do
+  desc "Deploy AeroChat to Apple TestFlight (Beta)"
+  lane :beta do
+    setup_ci
+
+    # Code signing via Fastlane Match (git-encrypted certs)
+    match(type: "appstore")
+
+    build_app(
+      workspace: "ios/AeroChat.xcworkspace",
+      scheme: "AeroChat",
+      export_method: "app-store",
+      clean: true
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
+
+platform :android do
+  desc "Deploy AeroChat to Google Play Console (Beta Track)"
+  lane :beta do
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      project_dir: "android"
+    )
+
+    upload_to_play_store(
+      track: "beta",
+      aab: "android/app/build/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

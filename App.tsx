@@ -1,118 +1,197 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * AeroChat — Main Application
  *
- * @format
+ * Offline acoustic mesh network.
+ * Top: waterfall spectrogram (18kHz–20kHz)
+ * Bottom: terminal chat log + input
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
+  View,
+  Text,
   StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  SafeAreaView,
+  Pressable,
+  PermissionsAndroid,
+  Platform,
+  Alert,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import WaterfallSpectrogram, { pushSpectrumData } from './src/components/WaterfallSpectrogram';
+import TerminalChat from './src/components/TerminalChat';
+import { MeshController, MeshMessage } from './src/protocol/MeshController';
+import { Colors, Fonts, Layout } from './src/styles/theme';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const App: React.FC = () => {
+  const meshRef = useRef<MeshController | null>(null);
+  const [messages, setMessages] = useState<MeshMessage[]>([]);
+  const [isListening, setIsListening] = useState(false);
+  const [isTransmitting, setIsTransmitting] = useState(false);
+  const [bufferLength, setBufferLength] = useState(0);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    const mesh = new MeshController();
+    meshRef.current = mesh;
+    mesh.onMessage((msg) => setMessages(prev => [...prev, msg]));
+    mesh.onSpectrum((spectrum) => {
+      pushSpectrumData(spectrum);
+      setBufferLength(spectrum.bandMagnitudes?.length || 0);
+    });
+    mesh.onError((error) => Alert.alert('MESH ERROR', error));
+    return () => { mesh.destroy(); };
+  }, []);
+
+  const requestMicPermission = useCallback(async (): Promise<boolean> => {
+    if (Platform.OS !== 'android') return true;
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      { title: 'AeroChat', message: 'Microphone required for acoustic mesh.', buttonPositive: 'GRANT' },
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  }, []);
+
+  const toggleListening = useCallback(async () => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    if (isListening) {
+      await mesh.stopListening();
+      setIsListening(false);
+    } else {
+      const ok = await requestMicPermission();
+      if (!ok) { Alert.alert('DENIED', 'Microphone required.'); return; }
+      await mesh.startListening();
+      setIsListening(true);
+    }
+  }, [isListening, requestMicPermission]);
+
+  const handleSend = useCallback(async (text: string) => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    setIsTransmitting(true);
+    try { await mesh.sendMessage(text); }
+    catch (e: any) { Alert.alert('TX FAILED', e.message || 'Error'); }
+    finally { setIsTransmitting(false); }
+  }, []);
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+    <SafeAreaView style={styles.safe}>
+      <StatusBar barStyle="light-content" backgroundColor="#0A0A0A" />
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.flex}>
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+            {/* Header */}
+            <View style={styles.header}>
+              <View>
+                <Text style={styles.title}>AEROCHAT</Text>
+                <Text style={styles.subtitle}>16.5 / 17.5 kHz FSK MESH · 50 BPS</Text>
+              </View>
+              <Pressable
+                onPress={toggleListening}
+                style={({ pressed }) => [
+                  styles.btn,
+                  {
+                    backgroundColor: pressed ? '#F5F5F5' : '#0A0A0A',
+                    borderColor: isListening ? '#F5F5F5' : '#555555',
+                  },
+                ]}
+              >
+                {({ pressed }) => (
+                  <Text style={[styles.btnText, {
+                    color: pressed ? '#0A0A0A' : isListening ? '#F5F5F5' : '#555555',
+                  }]}>
+                    {isListening ? 'STOP RX' : 'START RX'}
+                  </Text>
+                )}
+              </Pressable>
+            </View>
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+            {/* Divider */}
+            <View style={styles.div} />
+
+            {/* Waterfall — 45% */}
+            <View style={styles.topSection}>
+              <WaterfallSpectrogram isActive={isListening} />
+            </View>
+
+            {/* Divider */}
+            <View style={styles.div} />
+
+            {/* Chat — 55% */}
+            <View style={styles.bottomSection}>
+              <TerminalChat
+                messages={messages}
+                onSend={handleSend}
+                isTransmitting={isTransmitting}
+                bufferLength={bufferLength}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: '#0A0A0A',
+  },
+  flex: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Layout.PADDING,
+    paddingVertical: 8,
+  },
+  title: {
+    fontFamily: Fonts.MONO,
+    fontSize: 18,
+    color: '#F5F5F5',
+    fontWeight: '700',
+    letterSpacing: 4,
+  },
+  subtitle: {
+    fontFamily: Fonts.MONO,
+    fontSize: 9,
+    color: '#444444',
+    letterSpacing: 1,
+    marginTop: 2,
+  },
+  btn: {
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  btnText: {
+    fontFamily: Fonts.MONO,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 2,
+  },
+  div: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#1A1A1A',
+  },
+  topSection: {
+    flex: 4.5,
+  },
+  bottomSection: {
+    flex: 5.5,
+  },
+});
