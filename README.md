@@ -37,3 +37,48 @@ npm install
 # For iOS:
 cd ios && pod install
 ```
+
+---
+
+<div align="center" style="background: radial-gradient(circle, rgba(127,82,255,0.08) 0%, transparent 80%); padding: 28px; border-radius: 20px;">
+  <!-- Ultrasonic Wave / Acoustic Mesh (CSS SVG) -->
+  <svg width="220" height="50" viewBox="0 0 220 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 8px;">
+    <style>
+      .sound-wave {
+        stroke: #7F52FF;
+        stroke-linecap: round;
+        animation: audioPulse 1.2s infinite ease-in-out alternate;
+        transform-origin: center;
+      }
+      .sound-node {
+        fill: #61DAFB;
+        animation: nodeFlash 1.6s infinite alternate ease-in-out;
+      }
+      @keyframes audioPulse {
+        0% { transform: scaleY(0.4); stroke-width: 1.5; stroke: #7F52FF; }
+        100% { transform: scaleY(1.2); stroke-width: 2.5; stroke: #61DAFB; filter: drop-shadow(0 0 4px #61DAFB); }
+      }
+      @keyframes nodeFlash {
+        0% { opacity: 0.3; r: 3; }
+        100% { opacity: 1; r: 5; fill: #7F52FF; filter: drop-shadow(0 0 5px #7F52FF); }
+      }
+    </style>
+    <!-- Multi-frequency Sound Bars representing FSK Modulation -->
+    <line class="sound-wave" x1="40" y1="15" x2="40" y2="35" style="animation-delay: -0.1s;" />
+    <line class="sound-wave" x1="60" y1="10" x2="60" y2="40" style="animation-delay: -0.3s;" />
+    <line class="sound-wave" x1="80" y1="5" x2="80" y2="45" style="animation-delay: -0.5s;" />
+    <line class="sound-wave" x1="100" y1="15" x2="100" y2="35" style="animation-delay: -0.7s;" />
+    <line class="sound-wave" x1="120" y1="8" x2="120" y2="42" style="animation-delay: -0.9s;" />
+    <line class="sound-wave" x1="140" y1="3" x2="140" y2="47" style="animation-delay: -1.1s;" />
+    <line class="sound-wave" x1="160" y1="12" x2="160" y2="38" style="animation-delay: -1.3s;" />
+    <line class="sound-wave" x1="180" y1="18" x2="180" y2="32" style="animation-delay: -1.5s;" />
+    
+    <!-- Acoustic Transmitting Nodes -->
+    <circle class="sound-node" cx="20" cy="25" r="4" />
+    <circle class="sound-node" cx="200" cy="25" r="4" style="animation-delay: -0.8s;" />
+  </svg>
+  
+  <p style="font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #7F52FF; margin: 0; letter-spacing: 0.05em;">
+    built by anuj with ❤️ to the silent, telepathic frequencies of kali uchis's "telepatía"
+  </p>
+</div>
