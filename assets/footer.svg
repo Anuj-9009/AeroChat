@@ -1,0 +1,245 @@
+<svg width="600" height="115" viewBox="0 0 600 115" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .player-card {
+      fill: #0c0b14;
+      stroke: rgba(127, 82, 255, 0.25);
+      stroke-width: 1.5;
+      rx: 16px;
+    }
+    .glass-shine {
+      animation: shine 6s infinite linear;
+    }
+    @keyframes shine {
+      0% { transform: translateX(-150px); opacity: 0; }
+      15% { opacity: 0.15; }
+      35% { opacity: 0.15; }
+      50% { transform: translateX(600px); opacity: 0; }
+      100% { transform: translateX(600px); opacity: 0; }
+    }
+    .vinyl {
+      animation: spin 8s linear infinite;
+      transform-origin: 0px 0px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .tonearm {
+      animation: playArm 15s ease-in-out infinite alternate;
+      transform-origin: 0px 0px;
+    }
+    @keyframes playArm {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(8deg); }
+    }
+    .track-text {
+      font-family: 'JetBrains Mono', 'Sora', monospace;
+      font-size: 11px;
+      font-weight: bold;
+      fill: #ff79c6;
+      filter: drop-shadow(0 0 2px #ff79c640);
+    }
+    .marquee {
+      animation: slideMarquee 15s linear infinite;
+    }
+    @keyframes slideMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .control-btn {
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      opacity: 0.75;
+    }
+    .control-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .play-btn {
+      animation: pulsePlay 2s infinite alternate ease-in-out;
+    }
+    @keyframes pulsePlay {
+      0% { filter: drop-shadow(0 0 1px #ff79c6); }
+      100% { filter: drop-shadow(0 0 5px #ff79c6); }
+    }
+    .heart-icon {
+      fill: #ff2a5f;
+      animation: pulseHeart 1.2s infinite alternate ease-in-out;
+      transform-origin: 188px 52px;
+    }
+    @keyframes pulseHeart {
+      0% { transform: scale(0.9); filter: drop-shadow(0 0 1px #ff2a5f); }
+      100% { transform: scale(1.15); filter: drop-shadow(0 0 5px #ff2a5f); }
+    }
+    .time-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      fill: #ffffff;
+      opacity: 0.65;
+    }
+    .progress-bar-bg {
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+    .progress-bar-fill {
+      stroke: #ff79c6;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 180;
+      stroke-dashoffset: 180;
+      animation: playProgress 15s linear infinite;
+    }
+    .playhead {
+      fill: #ffffff;
+      stroke: #ff79c6;
+      stroke-width: 1.5;
+      animation: playHead 15s linear infinite;
+    }
+    @keyframes playProgress {
+      0% { stroke-dashoffset: 180; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes playHead {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(180px); }
+    }
+    .signature-text {
+      font-family: 'Sora', 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      fill: #7F52FF;
+      letter-spacing: 0.03em;
+    }
+    .signature-heart {
+      fill: #ff2a5f;
+      animation: sigHeart 1.2s infinite alternate ease-in-out;
+      transform-origin: 236px 87px;
+    }
+    @keyframes sigHeart {
+      0% { transform: scale(0.9); filter: drop-shadow(0 0 1px #ff2a5f); }
+      100% { transform: scale(1.15); filter: drop-shadow(0 0 4px #ff2a5f); }
+    }
+    .signature-caption {
+      font-family: 'Sora', 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      fill: #ffffff;
+      opacity: 0.75;
+    }
+    .eq-bar {
+      fill: #7F52FF;
+      transform-origin: bottom;
+      animation: eqBounce 1.2s infinite ease-in-out alternate;
+    }
+    @keyframes eqBounce {
+      0% { height: 4px; y: 61px; }
+      100% { height: 38px; y: 27px; }
+    }
+    .bar-1 { animation-delay: -0.4s; animation-duration: 1.4s; }
+    .bar-2 { animation-delay: -0.9s; animation-duration: 1.1s; }
+    .bar-3 { animation-delay: -0.2s; animation-duration: 1.3s; }
+    .bar-4 { animation-delay: -0.7s; animation-duration: 0.9s; }
+    .bar-5 { animation-delay: -1.1s; animation-duration: 1.5s; }
+    .bar-6 { animation-delay: -0.5s; animation-duration: 1.2s; }
+    .bar-7 { animation-delay: -1.3s; animation-duration: 1.0s; }
+    .bar-8 { animation-delay: -0.1s; animation-duration: 1.4s; }
+    .bar-9 { animation-delay: -0.8s; animation-duration: 1.1s; }
+    .bar-10 { animation-delay: -0.3s; animation-duration: 1.3s; }
+  </style>
+
+  <rect x="1" y="1" width="598" height="113" class="player-card" />
+  
+  <!-- Diagonal Glass Sheen Sweep -->
+  <g pointer-events="none" style="mix-blend-mode: overlay;">
+    <path d="M-50,0 L0,0 L-100,120 L-150,120 Z" fill="url(#sheenGrad)" class="glass-shine" />
+  </g>
+
+  <!-- Left Vinyl Record Group -->
+  <g transform="translate(60, 58)">
+    <circle cx="0" cy="0" r="44" fill="#7F52FF" opacity="0.08" filter="blur(16px)" />
+    <g class="vinyl">
+      <circle cx="0" cy="0" r="38" fill="#111111" stroke="#7F52FF" stroke-width="1.5" />
+      <circle cx="0" cy="0" r="32" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" fill="none" />
+      <circle cx="0" cy="0" r="26" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" fill="none" />
+      <circle cx="0" cy="0" r="20" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" fill="none" />
+      <circle cx="0" cy="0" r="14" fill="#ff79c6" />
+      <circle cx="0" cy="0" r="8" fill="#111111" />
+      <circle cx="0" cy="0" r="2.5" fill="#7F52FF" />
+    </g>
+    <!-- Pivot Tonearm -->
+    <g class="tonearm" transform="translate(30, -30)">
+      <circle cx="0" cy="0" r="4.5" fill="#333" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+      <path d="M0,0 L-22,24 L-20,38" stroke="#aaaaaa" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      <rect x="-22.5" y="37.5" width="4" height="6" rx="1" fill="#ff79c6" transform="rotate(-15, -20, 38)" />
+    </g>
+  </g>
+
+  <!-- Center Text / Marquee -->
+  <svg x="125" y="16" width="310" height="20" style="overflow: hidden;">
+    <g class="marquee">
+      <text x="0" y="14" class="track-text">Now Playing: "telepatía" — Kali Uchis    •    Now Playing: "telepatía" — Kali Uchis    •    </text>
+    </g>
+  </svg>
+
+  <!-- Mock Player Controls (y=52) -->
+  <g transform="translate(0, 4)">
+    <!-- Skip Backward -->
+    <path class="control-btn" d="M127,48 L132,44 L132,52 Z M126,44 L126,52" stroke="#7F52FF" stroke-width="1.5" fill="#7F52FF" />
+    <!-- Play/Pause (Glowing Pause Lines) -->
+    <rect class="control-btn play-btn" x="146" y="44" width="2.5" height="8" rx="0.5" fill="#ff79c6" />
+    <rect class="control-btn play-btn" x="152" y="44" width="2.5" height="8" rx="0.5" fill="#ff79c6" />
+    <!-- Skip Forward -->
+    <path class="control-btn" d="M165,44 L170,48 L165,52 Z M171,44 L171,52" stroke="#7F52FF" stroke-width="1.5" fill="#7F52FF" />
+    <!-- Pulse Heart -->
+    <path class="control-btn heart-icon" d="M188,49 C186,47 183,47 182,48 C181,49 181,51 183,53 L188,57 L193,53 C195,51 195,49 194,48 C193,47 190,47 188,49 Z" />
+  </g>
+
+  <!-- Progress Bar (x=210 to 390) -->
+  <g transform="translate(0, 4)">
+    <line x1="210" y1="48" x2="390" y2="48" class="progress-bar-bg" />
+    <line x1="210" y1="48" x2="390" y2="48" class="progress-bar-fill" />
+    <circle cx="210" cy="48" r="4.5" class="playhead" />
+  </g>
+
+  <!-- Time Stamps (x=400) -->
+  <g transform="translate(0, 4)">
+    <text x="400" y="51" class="time-text">01:47</text>
+    <text x="431" y="51" class="time-text" opacity="0.3">/</text>
+    <text x="440" y="51" class="time-text">03:58</text>
+  </g>
+
+  <!-- Signature Row (y=88) -->
+  <text x="125" y="87" class="signature-text">built by ANUJ with</text>
+  <path class="signature-heart" d="M234,83 C233,81 230,81 229,82 C228,83 228,85 230,87 L234,91 L238,87 C240,85 240,83 239,82 C238,81 235,81 234,83 Z" />
+  <text x="247" y="87" class="signature-caption">to the silent, telepathic frequencies of kali uchis</text>
+
+  <!-- Glowing Equalizer (x=490 to 570) -->
+  <g filter="url(#eqGlow)" transform="translate(0, -6)">
+    <rect class="eq-bar bar-1" x="495" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-2" x="502" y="35" width="4" height="30" rx="2" fill="#ff79c6" />
+    <rect class="eq-bar bar-3" x="509" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-4" x="516" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-5" x="523" y="35" width="4" height="30" rx="2" fill="#ff79c6" />
+    <rect class="eq-bar bar-6" x="530" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-7" x="537" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-8" x="544" y="35" width="4" height="30" rx="2" fill="#ff79c6" />
+    <rect class="eq-bar bar-9" x="551" y="35" width="4" height="30" rx="2" />
+    <rect class="eq-bar bar-10" x="558" y="35" width="4" height="30" rx="2" />
+  </g>
+
+  <defs>
+    <filter id="eqGlow">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="sheenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>
