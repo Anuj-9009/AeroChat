@@ -30,6 +30,13 @@
   <circle class="glow-blob" cx="190" cy="80" r="75" fill="#ff79c6" />
   <circle class="glow-blob" cx="610" cy="90" r="65" fill="#7F52FF" style="animation-delay: -3.5s;" />
   
+  <!-- Custom Acoustic Waves & Frequency Waves for Echolocation -->
+    <circle cx="100" cy="80" r="40" stroke="rgba(127,82,255,0.15)" stroke-width="1.5" fill="none" />
+    <circle cx="100" cy="80" r="60" stroke="rgba(127,82,255,0.08)" stroke-width="1" fill="none" />
+    <circle cx="700" cy="80" r="40" stroke="rgba(255,121,198,0.15)" stroke-width="1.5" fill="none" />
+    <circle cx="700" cy="80" r="60" stroke="rgba(255,121,198,0.08)" stroke-width="1" fill="none" />
+    <path d="M 220 80 Q 310 50 400 80 T 580 80" stroke="rgba(127,82,255,0.12)" stroke-width="2" fill="none" />
+  
   <!-- Title Text -->
   <text x="50%" y="78" dominant-baseline="middle" text-anchor="middle" class="text-title">A E R O C H A T</text>
   <text x="50%" y="122" dominant-baseline="middle" text-anchor="middle" class="text-subtitle">OFFLINE ACOUSTIC MESH MESSENGER</text>
